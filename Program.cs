@@ -1,3 +1,5 @@
+global using CmdApi.models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
