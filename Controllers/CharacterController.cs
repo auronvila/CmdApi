@@ -11,24 +11,25 @@ namespace CmdApi.Controllers
         public CharacterController(ICharacterService characterService)
         {
             _characterService = characterService;
-            
         }
 
 
         [HttpGet("GetAll")]
-        public ActionResult<List<Character>> GetAllCharacters(){
-            return Ok(_characterService.GetAllCharacters());
+        public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllCharacters()
+        {
+            return Ok( await _characterService.GetAllCharacters());
         }
 
         [HttpGet("GetSingleCharacter/{id}")]
-        public ActionResult<Character> GetSingleCharacter(int id){
-            return Ok(_characterService.GetCharacterBYId(id));
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetSingleCharacter(int id)
+        {
+            return Ok( await _characterService.GetCharacterBYId(id));
         }
 
         [HttpPost("CreateCharacter")]
-        public ActionResult<Character> CreateCharacter(Character newCharacter)
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> CreateCharacter(AddCharacterDto newCharacter)
         {
-            return Ok(_characterService.AddCharacter(newCharacter));
+            return Ok( await _characterService.AddCharacter(newCharacter));
         }
     }
 }
