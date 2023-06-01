@@ -24,6 +24,28 @@ namespace CmdApi.services.characterService
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id)
+        {
+             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+        try
+            {
+            var character  = characters.FirstOrDefault(c => c.Id == id);
+
+            if(character == null) throw new Exception($"character with id {id} is not found");
+
+            characters.Remove(character);
+
+
+            serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+             }
+        catch (Exception ex)
+            {
+                serviceResponse.Successful = false;
+                serviceResponse.Message = ex.Message;
+            }
+             return serviceResponse;
+        }
+
         public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
@@ -38,6 +60,34 @@ namespace CmdApi.services.characterService
             serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
 
             return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedCharacter)
+        {
+            var serviceResponse = new ServiceResponse<GetCharacterDto>();
+        try
+            {
+            var character  = characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+
+            if(character == null) throw new Exception($"character with id {updatedCharacter.Id} is not found");
+
+            _mapper.Map<Character>(updatedCharacter);
+
+            character.Name = updatedCharacter.Name;
+            character.Intelligence = updatedCharacter.Intelligence;
+            character.Defense = updatedCharacter.Defense;
+            character.Strength = updatedCharacter.Strength;
+            character.HitPoints = updatedCharacter.HitPoints;
+            character.Class = updatedCharacter.Class;
+
+            serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
+             }
+        catch (Exception ex)
+            {
+                serviceResponse.Successful = false;
+                serviceResponse.Message = ex.Message;
+            }
+             return serviceResponse;
         }
     }
 }
